@@ -1,0 +1,32 @@
+{% extends './base.html' %}
+
+{% block page %}
+    <form method="post">
+        <div class="mb-3 row">
+            <div class="col-sm-2">
+                {% csrf_token %}
+                {{ layers_form }}
+                <input type="submit" class="btn btn-primary mt-2" value="Update hidden layers">
+            </div>
+        </div>
+    </form>
+    {% if layers_form.hidden_layers.value > "0" %}
+        <form method="post">
+            {{ layer_formset.managment_form }}
+            {% csrf_token %}
+            {% for form in layer_formset %}
+            <div class="row">
+                <h4>Layer 1</h4>
+                <div class="col-sm-2">
+                    {{ form }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <input type="submit" class="btn btn-primary mt-2" value="Update layers">
+                </div>
+            </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

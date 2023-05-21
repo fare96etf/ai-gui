@@ -16,12 +16,10 @@ ACTIVATION_CHOICES = [
 ]
 
 class HiddenLayersForm(forms.Form):
-    layers_form = forms.BooleanField(widget=forms.HiddenInput, initial=True)
     hidden_layers = forms.IntegerField(label="Number of hidden layers", min_value=1)
 
 class HiddenLayerForm(forms.Form):
-    layer_form = forms.BooleanField(widget=forms.HiddenInput, initial=True)
-    neurons = forms.IntegerField(label="Number of neurons", min_value=1)
+    neurons = forms.IntegerField(label="Number of neurons", min_value=1, initial=1)
     activation = forms.ChoiceField(label="Activation function", choices=ACTIVATION_CHOICES)
 
 # Create your views here.
@@ -30,22 +28,26 @@ def index(request):
     layer_formset = formset_factory(HiddenLayerForm)
     
     if request.method == 'POST':
-        print(request.POST)
-        if 'layers_form' in request.POST:
-            layers_form = HiddenLayersForm(request.POST, request.FILES)
+        if "layers_form" in request.POST:
+            layers_form = HiddenLayersForm(request.POST)
         
             if layers_form.is_valid():
-                print("radi prva forma")
-                layer_formset = formset_factory(HiddenLayerForm, extra=layers_form.cleaned_data["hidden_layers"])
+                layers_num = layers_form.cleaned_data["hidden_layers"]
+                layer_formset = formset_factory(HiddenLayerForm, extra=layers_num)
         
-        if 'form-0-layer_form' in request.POST:
-            print("radi druga forma")
+        elif "layer_formset" in request.POST:
             formset = layer_formset(request.POST)
-            print(formset)
-        
+            
             if formset.is_valid():
+                layers = []
                 for form in formset:
-                    print(form)
+                    layers.append(
+                        {
+                            "neurons": form.cleaned_data["neurons"],
+                            "activation": form.cleaned_data["activation"]
+                        }
+                    )
+                nn_scripts.run_neural_network(layers)          
         
     context = {
         'layers_form': layers_form,

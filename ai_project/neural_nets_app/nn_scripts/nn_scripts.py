@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Dense
 def __init__():
     pass
 
-def run_neural_network(neurons, activation):
+def run_neural_network(layers=[]):
     # load the dataset
     dataset = loadtxt('./neural_nets_app/nn_scripts/pima-indians-diabetes.csv', delimiter=',')
     # split into input (X) and output (y) variables
@@ -14,8 +14,12 @@ def run_neural_network(neurons, activation):
     # define the keras model
     model = Sequential()
     model.add(Dense(12, input_shape=(8,), activation='relu'))
-    model.add(Dense(8, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))
+    
+    for layer in layers:
+        model.add(Dense(layer["neurons"], activation=layer["activation"]))
+    
+    # model.add(Dense(8, activation='relu'))
+    # model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     # fit the keras model on the dataset

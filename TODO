@@ -1,0 +1,6 @@
+-first page with navbar (home, nn theory, nn scripts)
+-graphical representation of neural net
+-upload csv and convert it to dataset, chose delimiter and size
+-compile function (loss, optimizer, metrics, ...)
+-fit function (input, output, epochs, batch size, ...)
+-predictions, testing, results, ...

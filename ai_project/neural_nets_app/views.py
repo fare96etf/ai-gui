@@ -23,7 +23,7 @@ class HiddenLayerForm(forms.Form):
     activation = forms.ChoiceField(label="Activation function", choices=ACTIVATION_CHOICES)
 
 # Create your views here.
-def index(request):
+def script(request):
     layers_form = HiddenLayersForm()
     layer_formset = formset_factory(HiddenLayerForm)
     
@@ -54,4 +54,10 @@ def index(request):
         'layer_formset': layer_formset
     }
     
-    return render(request, "neural_nets_app/index.html", context=context)
+    return render(request, "neural_nets_app/nn_training.html", context=context)
+
+def home(request):
+    return render(request, "neural_nets_app/home.html")
+
+def theory(request):
+    return render(request, "neural_nets_app/nn_theory.html")

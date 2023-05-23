@@ -61,3 +61,6 @@ def home(request):
 
 def theory(request):
     return render(request, "neural_nets_app/nn_theory.html")
+
+def user_guide(request):
+    return render(request, "neural_nets_app/user_guide.html")

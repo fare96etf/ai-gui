@@ -15,11 +15,14 @@
             {{ layer_formset.management_form }}
             {% csrf_token %}
             {% for form in layer_formset %}
-                <div class="row">
+                <div class="row mb-3">
                     <h4>Layer {{ forloop.counter }}</h4>
+                    {% for field in form %}
                     <div class="col-sm-2">
-                        {{ form }}
+                        {{ field.label }}
+                        {{ field }}
                     </div>
+                    {% endfor %}
                 </div>
             {% endfor %}
             <div class="row">

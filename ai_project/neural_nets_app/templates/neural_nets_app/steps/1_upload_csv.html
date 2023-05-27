@@ -1,0 +1,13 @@
+{% extends '../base.html' %}
+
+{% block page %}
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3 row">
+        <div class="col-sm-2">
+            {% csrf_token %}
+            <input type="file" class="custom-file-input" id="customFile" name="csv" required accept=".csv" size="60">
+            <input type="submit" name="upload_form" class="btn btn-primary mt-2" value="Upload data">
+        </div>
+    </div>
+</form>
+{% endblock %}

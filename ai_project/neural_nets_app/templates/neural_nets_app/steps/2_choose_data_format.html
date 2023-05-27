@@ -1,0 +1,13 @@
+{% extends '../base.html' %}
+
+{% block page %}
+<form method="post">
+    <div class="mb-3 row">
+        <div class="col-sm-2">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" name="form" class="btn btn-primary mt-2" value="Update data format">
+        </div>
+    </div>
+</form>
+{% endblock %}

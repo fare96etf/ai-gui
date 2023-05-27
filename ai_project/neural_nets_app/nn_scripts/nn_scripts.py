@@ -5,12 +5,23 @@ from tensorflow.keras.layers import Dense
 def __init__():
     pass
 
-def run_neural_network(layers=[]):
+def run_neural_network(data, layers=[], outputs=[]):
     # load the dataset
-    dataset = loadtxt('./neural_nets_app/nn_scripts/pima-indians-diabetes.csv', delimiter=',')
+    # dataset = loadtxt('./neural_nets_app/nn_scripts/pima-indians-diabetes.csv', delimiter=',')
     # split into input (X) and output (y) variables
-    X = dataset[:,0:8]
-    y = dataset[:,8]
+    # X = dataset[:,0:8]
+    # y = dataset[:,8]
+    X = []
+    y = []
+    
+    for column in range(9):
+        print(column)
+        if column in outputs:
+            y.append(data[:, column])
+        else:
+            X.append(data[:, column])
+    
+    print(y)   
     # define the keras model
     model = Sequential()
     model.add(Dense(12, input_shape=(8,), activation='relu'))

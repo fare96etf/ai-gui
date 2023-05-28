@@ -6,22 +6,20 @@ def __init__():
     pass
 
 def run_neural_network(data, layers=[], outputs=[]):
-    # load the dataset
-    # dataset = loadtxt('./neural_nets_app/nn_scripts/pima-indians-diabetes.csv', delimiter=',')
-    # split into input (X) and output (y) variables
-    # X = dataset[:,0:8]
-    # y = dataset[:,8]
+    print("TRAINING STARTED")
+    # prepare the data
     X = []
     y = []
     
     for column in range(9):
-        print(column)
         if column in outputs:
-            y.append(data[:, column])
+            y.append(list(data[:, column]))
         else:
-            X.append(data[:, column])
+            X.append(list(data[:, column]))
     
-    print(y)   
+    X = list(map(lambda *el: list(el), *X))
+    y = list(map(lambda *el: list(el), *y))
+    
     # define the keras model
     model = Sequential()
     model.add(Dense(12, input_shape=(8,), activation='relu'))
@@ -29,8 +27,6 @@ def run_neural_network(data, layers=[], outputs=[]):
     for layer in layers:
         model.add(Dense(layer["neurons"], activation=layer["activation"]))
     
-    # model.add(Dense(8, activation='relu'))
-    # model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     # fit the keras model on the dataset
@@ -39,4 +35,5 @@ def run_neural_network(data, layers=[], outputs=[]):
     predictions = (model.predict(X) > 0.5).astype(int)
     # summarize the first 5 cases
     for i in range(5):
-        print('%s => %d (expected %d)' % (X[i].tolist(), predictions[i], y[i]))
+        print('%s => %d (expected %d)' % (X[i], predictions[i], y[i][0]))
+    print("TRAINING COMPLETED")

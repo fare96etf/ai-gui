@@ -1,40 +1,10 @@
 import io
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django import forms
 from django.forms import formset_factory
-from formtools.wizard.views import SessionWizardView
 from .nn_scripts import nn_scripts
 import pandas as pd
-
-ACTIVATION_CHOICES = [
-    ("relu", "relu"),
-    ("sigmoid", "sigmoid"), 
-    ("softmax", "softmax"), 
-    ("softplus", "softplus"), 
-    ("softsign", "softsign"), 
-    ("tanh", "tanh"), 
-    ("selu", "selu"), 
-    ("elu", "elu"), 
-    ("exponential", "exponential")
-]
-
-class UploadCsvForm(forms.Form):
-    file = forms.FileField(label="Upload csv", required=True)
-
-class ChooseDataFormat(forms.Form):
-    outputs = forms.MultipleChoiceField(label="Choose output fields", required=True, widget=forms.CheckboxSelectMultiple)
-
-    def set_choices(self, choices):
-        self.fields["outputs"].choices = choices
-
-class HiddenLayersForm(forms.Form):
-    hidden_layers = forms.IntegerField(label="Number of hidden layers", min_value=1)
-
-class HiddenLayerForm(forms.Form):
-    neurons = forms.IntegerField(label="Number of neurons", min_value=1, initial=1)
-    activation = forms.ChoiceField(label="Activation function", choices=ACTIVATION_CHOICES)
-
+from .forms import ChooseDataFormatForm, HiddenLayersForm, HiddenLayerForm
 
 # Create your views here.
 def upload_csv(request):
@@ -59,8 +29,7 @@ def choose_data_format(request):
     choices = [(index, col) for index, col in enumerate(csv_data().columns.tolist())]
     
     if request.method == 'POST':
-        print(request.POST)
-        form = ChooseDataFormat(request.POST)
+        form = ChooseDataFormatForm(request.POST)
         form.set_choices(choices)
         
         if form.is_valid():    
@@ -71,7 +40,7 @@ def choose_data_format(request):
                     
             return HttpResponseRedirect('step3')
     else: 
-        form = ChooseDataFormat()
+        form = ChooseDataFormatForm()
         form.set_choices(choices)
     
     return render(request, "neural_nets_app/steps/2_choose_data_format.html", {"form": form}) 
@@ -116,7 +85,7 @@ def home(request):
     return render(request, "neural_nets_app/home.html")
 
 def theory(request):
-    return render(request, "neural_nets_app/nn_theory.html")
+    return render(request, "neural_nets_app/theory.html")
 
 def user_guide(request):
     return render(request, "neural_nets_app/user_guide.html")

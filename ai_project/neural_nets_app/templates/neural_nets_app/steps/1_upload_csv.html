@@ -1,12 +1,16 @@
 {% extends '../base.html' %}
 
-{% block page %}
+{% block title %}
+    Keras GUI - everything you need to train your neural network
+{% endblock  %}
+
+{% block content %}
 <form method="post" enctype="multipart/form-data">
     <div class="mb-3 row">
         <div class="col-sm-2">
             {% csrf_token %}
             <input type="file" class="custom-file-input" id="customFile" name="csv" required accept=".csv" size="60">
-            <input type="submit" name="upload_form" class="btn btn-primary mt-2" value="Upload data">
+            <input type="submit" name="upload_form" class="btn btn-primary mt-2" value="Upload CSV">
         </div>
     </div>
 </form>

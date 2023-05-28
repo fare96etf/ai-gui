@@ -8,9 +8,19 @@
       
       {% include "./navbar.html" %}
 
-      <div class="mt-5 ms-5">
-        {% block page %}
-        {% endblock %}
+      <div class="mt-4 mx-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-center">
+            <h2>
+              {% block title %}
+              {% endblock %}
+            </h2>
+          </div>
+          <div class="card-body">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>       
       </div>
   </body>
 </html>

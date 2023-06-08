@@ -1,0 +1,25 @@
+{% extends '../base.html' %}
+
+{% block title %}
+    Choose compile and fit parameters
+{% endblock  %}
+
+{% block content %}
+<form method="post">
+    <div class="mb-3 d-flex justify-content-start align-items-center">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="me-2">
+                {{ field.label }} 
+                <br />
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <input type="submit" name="form" class="btn btn-primary mt-2" value="Start training">
+        </div>
+    </div>
+</form>
+{% endblock %}

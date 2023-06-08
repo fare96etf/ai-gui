@@ -5,13 +5,16 @@ from tensorflow.keras.layers import Dense
 def __init__():
     pass
 
-def run_neural_network(data, layers=[], outputs=[]):
+def run_neural_network(data, layers, outputs, compile_params, fit_params):
     print("TRAINING STARTED")
+    
     # prepare the data
     X = []
     y = []
     
-    for column in range(9):
+    col_no = len(data[0])
+    
+    for column in range(col_no):
         if column in outputs:
             y.append(list(data[:, column]))
         else:
@@ -22,15 +25,17 @@ def run_neural_network(data, layers=[], outputs=[]):
     
     # define the keras model
     model = Sequential()
-    model.add(Dense(12, input_shape=(8,), activation='relu'))
     
-    for layer in layers:
+    first_layer = layers[0]
+    model.add(Dense(first_layer["neurons"], input_shape=(col_no-len(outputs)), activation=first_layer["activation"]))
+    
+    for layer in layers[1:]:
         model.add(Dense(layer["neurons"], activation=layer["activation"]))
     
     # compile the keras model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss=compile_params["loss"], optimizer=compile_params["optimizer"], metrics=['accuracy'])
     # fit the keras model on the dataset
-    model.fit(X, y, epochs=150, batch_size=10, verbose=0)
+    model.fit(X, y, epochs=fit_params["epochs"], batch_size=fit_params["batch_size"], verbose=0)
     # make class predictions with the model
     predictions = (model.predict(X) > 0.5).astype(int)
     # summarize the first 5 cases

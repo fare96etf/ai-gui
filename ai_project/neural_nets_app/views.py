@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.forms import formset_factory
 from .nn_scripts import nn_scripts
 import pandas as pd
-from .forms import ChooseDataFormatForm, HiddenLayersForm, HiddenLayerForm, CompileFitForm
+from .forms import UploadCsvForm, ChooseDataFormatForm, HiddenLayersForm, HiddenLayerForm, CompileFitForm
 
 # Create your views here.
 def app(request):
@@ -13,21 +13,27 @@ def app(request):
 # step 1
 def upload_csv(request):
     if request.method == 'POST':
-        csv = request.FILES['csv']
-        csv_read = pd.read_csv(
-            io.StringIO(
-                csv.read().decode("utf-8")
-            ),
-            delimiter=","
-        )
-                
-        global nn_csv_data
-        def nn_csv_data():
-            return csv_read
+        form = UploadCsvForm(request.POST, request.FILES)
         
-        return HttpResponseRedirect('step2')
+        if form.is_valid():
+            delimiter = form.cleaned_data["delimiter"]
+            csv = request.FILES['file']
+            csv_read = pd.read_csv(
+                io.StringIO(
+                    csv.read().decode("utf-8")
+                ),
+                delimiter=delimiter
+            )
+                    
+            global nn_csv_data
+            def nn_csv_data():
+                return csv_read
+            
+            return HttpResponseRedirect('step2')
+    else:
+        form = UploadCsvForm()
 
-    return render(request, "neural_nets_app/steps/1_upload_csv.html") 
+    return render(request, "neural_nets_app/steps/1_upload_csv.html", {"form": form}) 
 
 # step 2
 def choose_data_format(request):
@@ -111,12 +117,23 @@ def script(request):
                 "epochs": epochs,
                 "batch_size": batch_size
             }
-                
-            nn_scripts.run_neural_network(data, nn_layers(), outputs, compile_params, fit_params) 
+            
+            model = nn_scripts.run_neural_network(data, nn_layers(), outputs, compile_params, fit_params)
+            
+            global nn_model
+            def nn_model():
+                return model
+            
+            return HttpResponseRedirect('step5') 
     else: 
         form = CompileFitForm()
 
     return render(request, "neural_nets_app/steps/4_compile_fit_params.html", {"form": form})
+
+# step 5
+def validation(request):
+    print(nn_model())
+    return render(request, "neural_nets_app/steps/5_validation.html")
 
 def home(request):
     return render(request, "neural_nets_app/home.html")

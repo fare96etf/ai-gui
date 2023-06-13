@@ -47,3 +47,4 @@ def run_neural_network(data, layers, outputs, compile_params, fit_params):
         print(y[i], end="")
         print(")")
     print("TRAINING COMPLETED")
+    return model

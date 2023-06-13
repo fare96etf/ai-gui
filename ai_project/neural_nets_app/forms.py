@@ -1,5 +1,9 @@
 from django import forms
-from .constants import ACTIVATION_CHOICES, OPTIMIZERS, LOSSES
+from .constants import DELIMITERS, ACTIVATION_CHOICES, OPTIMIZERS, LOSSES
+
+class UploadCsvForm(forms.Form):
+    delimiter = forms.ChoiceField(label="Choose delimiter", choices=DELIMITERS)
+    file = forms.FileField()
 
 class ChooseDataFormatForm(forms.Form):
     outputs = forms.MultipleChoiceField(label="Select output fields", required=True, widget=forms.CheckboxSelectMultiple)

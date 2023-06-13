@@ -1,5 +1,5 @@
+-next and previous button on steps pages
 -graphical representation of neural net
--upload csv, chose delimiter
--handle inputs and outputs in script
 -handle errors from script
 -predictions, testing, results, graphical ...
+-validation, choose record from set and see the probability, maybe add some general results

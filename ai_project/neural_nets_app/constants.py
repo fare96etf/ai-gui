@@ -1,3 +1,9 @@
+DELIMITERS = [
+    (",", ","),
+    (".", "."),
+    ("|", "|")
+]
+
 ACTIVATION_CHOICES = [
     ("relu", "relu"),
     ("sigmoid", "sigmoid"), 

@@ -15,6 +15,7 @@
         </div>
     </form>
     {% if layers_form.hidden_layers.value > "0" %}
+        {% comment %} {% include "../custom_components/modal.html" with title="radil" %} {% endcomment %}
         <form method="post">
             {{ layer_formset.management_form }}
             {% csrf_token %}

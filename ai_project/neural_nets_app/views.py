@@ -118,11 +118,11 @@ def script(request):
                 "batch_size": batch_size
             }
             
-            model = nn_scripts.run_neural_network(data, nn_layers(), outputs, compile_params, fit_params)
+            model, evaluation = nn_scripts.run_neural_network(data, nn_layers(), outputs, compile_params, fit_params)
             
             global nn_model
             def nn_model():
-                return model
+                return model, evaluation
             
             return HttpResponseRedirect('step5') 
     else: 
@@ -132,8 +132,11 @@ def script(request):
 
 # step 5
 def validation(request):
-    print(nn_model())
-    return render(request, "neural_nets_app/steps/5_validation.html")
+    args = {}
+    args['test_loss'] = nn_model()[0]
+    args['test_accurracy'] = nn_model()[1]
+    
+    return render(request, "neural_nets_app/steps/5_validation.html", args)
 
 def home(request):
     return render(request, "neural_nets_app/home.html")

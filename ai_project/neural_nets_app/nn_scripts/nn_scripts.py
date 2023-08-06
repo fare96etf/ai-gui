@@ -1,6 +1,7 @@
 from numpy import loadtxt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
 
 def __init__():
     pass
@@ -23,6 +24,8 @@ def run_neural_network(data, layers, outputs, compile_params, fit_params):
     X = list(map(lambda *el: list(el), *X))
     y = list(map(lambda *el: list(el), *y))
     
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
     # define the keras model
     model = Sequential()
     
@@ -35,7 +38,7 @@ def run_neural_network(data, layers, outputs, compile_params, fit_params):
     # compile the keras model
     model.compile(loss=compile_params["loss"], optimizer=compile_params["optimizer"], metrics=['accuracy'])
     # fit the keras model on the dataset
-    model.fit(X, y, epochs=fit_params["epochs"], batch_size=fit_params["batch_size"], verbose=0)
+    model.fit(X_train, y_train, epochs=fit_params["epochs"], batch_size=fit_params["batch_size"], verbose=0)
     # make class predictions with the model
     predictions = (model.predict(X))
     # summarize the first 5 cases
@@ -47,4 +50,8 @@ def run_neural_network(data, layers, outputs, compile_params, fit_params):
         print(y[i], end="")
         print(")")
     print("TRAINING COMPLETED")
-    return model
+    
+    # evaluate
+    evaluation = model.evaluate(X_test, y_test)
+    
+    return evaluation
